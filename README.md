@@ -5,6 +5,11 @@ Customer retention is crucial for credit card companies, as keeping existing cus
 
 🔍 Check the notebook file out here: [Project Notebook](/project.ipynb)
 # Background
+Customer churn is a major concern for credit card companies, as retaining existing customers is generally more cost-effective than acquiring new ones. High churn rates can impact profitability and growth, making churn prediction a valuable tool for improving customer retention strategies.
+
+The dataset used in this project, sourced from Kaggle, includes features related to credit card usage, and account details. By analyzing this data, we aim to build predictive models to identify at-risk customers and help credit card companies implement targeted interventions, such as personalized offers and enhanced services.
+
+This background section provides an overview of customer churn issues in the credit card industry and the significance of using machine learning techniques to predict and reduce churn.
 # Exploratory Data Analysis
 # Data Preprocessing
 # Model Selection and Tuning
