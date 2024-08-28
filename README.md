@@ -91,7 +91,108 @@ It is evident that in Q4, nearly all churned customers made fewer transactions c
 ![alt text](asset/q4q1_amt_ct_scat.png)
 _Scatter plot visualizing the relation of the change transaction amount and count from Q4 to Q1 by attrition status_
 # Data Preprocessing
+The initial step in data preprocessing involves selecting only the correlated variables and disregarding the rest. This is achieved by one-hot encoding all categorical variables into binary format and then plotting a correlation heatmap using all the variables.
+
+![alt text](asset/pearson_hm_encoded.png)
+_Pearson Correlation Heatmap with all the variables_
+
+![alt text](asset/spearman_hm_encoded.png)
+_Spearman Correlation Heatmap with all the variables_
+
+According to these heatmaps only 9 variables listed below will be chosen in the model training process since they show high correlation to the Attrited_Status variable
+- Avg_Utilization_Ratio
+- Total_Ct_Chng_Q4_Q1
+- Total_Trans_Ct
+- Total_Trans_Amt
+- Total_Amt_Chng_Q4_Q1
+- Total_Revolving_Bal
+- Contacts_Count_12_mon
+- Months_Inactive_12_mon
+- Total_Relationship_Count
+
+A pipeline has been established to preprocess the selected variables. This pipeline will standardize the numerical variables and apply one-hot encoding to the categorical data.
+
+Since no categorical variables were selected, the categorical_columns parameter contains an empty list.
+
+```python
+numerical_transformer = Pipeline(steps=[
+    ('scaler', StandardScaler())
+])
+
+categorical_transformer = Pipeline(steps=[
+    ('onehot', OneHotEncoder(drop='first',handle_unknown='ignore', sparse_output = False))
+])
+
+categorical_columns = []
+numerical_columns = ['Avg_Utilization_Ratio', 'Total_Ct_Chng_Q4_Q1', 'Total_Trans_Ct', 'Total_Trans_Amt', 
+                     'Total_Amt_Chng_Q4_Q1', 'Total_Revolving_Bal', 'Contacts_Count_12_mon', 'Months_Inactive_12_mon', 'Total_Relationship_Count']
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numerical_transformer, numerical_columns),
+        ('cat', categorical_transformer, categorical_columns)
+    ],remainder = 'drop')
+
+pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor)])
+```
+_Python code of the pipeline_
+
+The DataFrame is first divided into independent variables (X) and the dependent variable (y), and then further split into training and testing sets. Both X_train and X_test are subsequently fitted and transformed.
+
+As the dataset is imbalanced, with only 16.07% of customers classified as attrited, oversampling is applied to balance the classes. The Synthetic Minority Over-sampling Technique (SMOTE) is used in this process to create synthetic data points for the minority class, increasing the number of attrited customers to match that of the existing customers.
+
+```python
+X = df.drop(columns=['Attrition_Flag'])
+y = df['Attrition_Flag'].apply(lambda x : 1 if x == 'Attrited Customer' else 0)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+X_train_preprocessed = pipeline.fit_transform(X_train)
+X_test_preprocessed= pipeline.transform(X_test)
+
+smt = SMOTE()
+X_train_sm, y_train_sm = smt.fit_resample(X_train_preprocessed, y_train)
+```
+_Python code of the spilting and oversampling data_
 # Model Selection and Tuning
+The models selected for this project are listed as follow
+- Logistic Regression
+- Support Vector Classifier
+```python
+models = {
+    'LogisticRegression': LogisticRegression(),
+    'SVC': SVC(),
+    'DecisionTree': DecisionTreeClassifier(random_state=42),
+    'RandomForest': RandomForestClassifier(random_state=42),
+    'XGBoost': XGBClassifier(random_state=42)
+}
+
+param_grids = {
+    'LogisticRegression': {},
+    'SVC': {
+        'C': [0.5, 0.75, 1], 
+        'kernel': ['rbf']
+    },
+    'DecisionTree': {
+        'max_depth': [None, 10, 30],
+        'min_samples_split': [2, 5, 10]
+    },
+    'RandomForest': {
+        'n_estimators': [100, 200, 500],
+        'max_depth': [None, 10, 30],
+        'min_samples_split': [2, 5, 10],
+    },
+    'XGBoost': {
+        'n_estimators': [100, 200, 500],
+        'learning_rate': [0.01, 0.1, 0.3],
+        'max_depth': [3, 6, 10]
+    }   
+}
+
+cv = KFold(n_splits=3, shuffle=True, random_state=42)
+```
+_Python code of model selection and tuning_
 # Model Training
 # Model Evaluation
 # Conclusion
