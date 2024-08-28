@@ -82,7 +82,7 @@ According to the scatter plot below, most attrited customers have transaction co
 _Scatter plot visualizing the relation of total transaction amount and count by attrition status_
 
 ### **5. Is it possible to classified customer status by using the change in transaction count and amount between Q4 and Q1?**
-It is evidence that almost every churned customers make 
+It is evident that in Q4, nearly all churned customers made fewer transactions compared to Q1, and the total amount per transaction was also lower than in Q1.
 
 ![alt text](asset/q4q1_amt_ct_scat.png)
 _Scatter plot visualizing the relation of the change transaction amount and count from Q4 to Q1 by attrition status_
