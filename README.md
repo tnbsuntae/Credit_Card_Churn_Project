@@ -67,14 +67,18 @@ It is evident that nearly all churned customers hold a company blue card, with a
 _Bar graph visualizing card type percentage on attrition customer_
 
 ### **2. What are the distribution of revovling balance in both existing and attrited customers?**
+The boxplot below clearly indicates that existing customers have a higher median revolving balance of $1,364, while churned customers have a median of $0. This suggests that half of the churned customers have not utilized their revolving balance. 
 
 ![alt text](asset/rev_box.png)
 _Box plot visualizing revolving balance distribution by attrition status_
 
 ### **3. What are the distribution of average utilization ratio in both existing and attrited customers?**
 
+Since half of the attrited customers have not used their revolving balance, it's unsurprising that the boxplot distribution for their utilization ratio is extremely low. Conversely, most existing customers appear to have used their credit cards up to a utilization ratio of 0.53, or around half of their available credit.
+
 ![alt text](asset/uti_box.png)
 _Box plot visualizing average utilization ratio distribution by attrition status_
+
 ### **4. Is it possible to classified customer status by using all time transaction count and amount?**
 According to the scatter plot below, most attrited customers have transaction counts ranging from 0 to 60 and transaction amounts between $0 and $5,000.
 
