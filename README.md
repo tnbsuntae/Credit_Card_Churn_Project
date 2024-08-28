@@ -3,13 +3,15 @@ Customer retention is crucial for credit card companies, as keeping existing cus
 
 🔍 We'll start with Exploratory Data Analysis (EDA) to uncover key trends and patterns. Next, we'll preprocess the data to prepare it for modeling, including encoding categorical variables, scaled numerical variables, and balancing the classes. ⚙️ We'll then select and tune machine learning models to find the most effective one for predicting churn. Finally, we'll evaluate the models and provide insights to help banks reduce customer attrition and improve their services. 📊
 
-🔍 Check the notebook file out here: [Project Notebook](/project.ipynb)
+🔍 Check the full notebook file here: [Project Notebook](/project.ipynb)
+
 # Background
 Customer churn is a major concern for credit card companies, as retaining existing customers is generally more cost-effective than acquiring new ones. High churn rates can impact profitability and growth, making churn prediction a valuable tool for improving customer retention strategies.
 
 The dataset used in this project, sourced from Kaggle, includes features related to credit card usage, and account details. By analyzing this data, we aim to build predictive models to identify at-risk customers and help credit card companies implement targeted interventions, such as personalized offers and enhanced services.
 
 This background section provides an overview of customer churn issues in the credit card industry and the significance of using machine learning techniques to predict and reduce churn.
+
 # Exploratory Data Analysis
 The initial investigation focused on the percentage of customer attrition to assess the dataset's balance. It was found that the dataset is imbalanced, with existing customers representing a substantial 83.93%, compared to just 16.07% of attrited customers.
 
@@ -90,6 +92,7 @@ It is evident that in Q4, nearly all churned customers made fewer transactions c
 
 ![alt text](asset/q4q1_amt_ct_scat.png)
 _Scatter plot visualizing the relation of the change transaction amount and count from Q4 to Q1 by attrition status_
+
 # Data Preprocessing
 The initial step in data preprocessing involves selecting only the correlated variables and disregarding the rest. This is achieved by one-hot encoding all categorical variables into binary format and then plotting a correlation heatmap using all the variables.
 
@@ -155,10 +158,16 @@ smt = SMOTE()
 X_train_sm, y_train_sm = smt.fit_resample(X_train_preprocessed, y_train)
 ```
 _Python code of the spilting and oversampling data_
+
 # Model Selection and Tuning
-The models selected for this project are listed as follow
+The following models were chosen for this project:
 - Logistic Regression
 - Support Vector Classifier
+- Decision Tree Classifier
+- Random Forest Classifier
+- XGBoost Classifier
+  
+Each model was trained and evaluated using various parameters to identify the optimal configuration based on the test data.
 ```python
 models = {
     'LogisticRegression': LogisticRegression(),
@@ -193,7 +202,24 @@ param_grids = {
 cv = KFold(n_splits=3, shuffle=True, random_state=42)
 ```
 _Python code of model selection and tuning_
+
 # Model Training
+All models were trained using the GridSearchCV library, which evaluates them based on their accuracy scores. The best-performing model was XGBoost, achieving an accuracy score of 97.86%.
+
+```python
+grids = {}
+for model_name, model in models.items():
+    print(f'Training and tuning {model_name}...')
+    grids[model_name] = GridSearchCV(estimator=model, param_grid=param_grids[model_name], cv=cv,scoring='accuracy', n_jobs=-1, verbose=1)
+    grids[model_name].fit(X_train_sm, y_train_sm)
+    best_params = grids[model_name].best_params_
+    best_score = grids[model_name].best_score_
+    
+    print(f'Best parameters for {model_name}: {best_params}')
+    print(f'Best accuracy for {model_name}: {best_score}\n')
+```
+_Python code of model training_
+
 # Model Evaluation
 # Conclusion
 # References
