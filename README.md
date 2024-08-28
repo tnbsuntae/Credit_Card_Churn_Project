@@ -221,5 +221,24 @@ for model_name, model in models.items():
 _Python code of model training_
 
 # Model Evaluation
+All models were assessed to identify the best performer on the test data. Once again, the XGBoost model emerged as the top performer, achieving the highest scores in accuracy, precision, recall, and F1.
+
+```python
+for i in grids.keys():
+    y_pred = grids[i].predict(X_test_preprocessed)
+    print (i)
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+    print("==========================================================")
+    print()
+```
+_Python code of model evaluation on test data_
+
+![alt text](asset/xgboost_cm.png)
+_Confusion Matrix of XGBoost model_
+
+![alt text](asset/xgboost_report.png)
+_Classification Report of XGBoost model_
+
 # Conclusion
 # References
