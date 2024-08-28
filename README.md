@@ -76,14 +76,13 @@ _Box plot visualizing revolving balance distribution by attrition status_
 ![alt text](asset/uti_box.png)
 _Box plot visualizing average utilization ratio distribution by attrition status_
 ### **4. Is it possible to classified customer status by using all time transaction count and amount?**
-Based on the scatter plot below, most attrited customer's transactions stay in around the area of 0 to 60 transaction counts and the transaction amount of 0 to $5,000.
+According to the scatter plot below, most attrited customers have transaction counts ranging from 0 to 60 and transaction amounts between $0 and $5,000.
 
 ![alt text](asset/total_amt_ct_scat.png)
 _Scatter plot visualizing the relation of total transaction amount and count by attrition status_
 
-
 ### **5. Is it possible to classified customer status by using the change in transaction count and amount between Q4 and Q1?**
-
+It is evidence that almost every churned customers make 
 
 ![alt text](asset/q4q1_amt_ct_scat.png)
 _Scatter plot visualizing the relation of the change transaction amount and count from Q4 to Q1 by attrition status_
