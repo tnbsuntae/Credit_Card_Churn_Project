@@ -206,32 +206,39 @@ cv = KFold(n_splits=3, shuffle=True, random_state=42)
 _Python code of model selection and tuning_
 
 # Model Training
-All models were trained using the GridSearchCV library, which evaluates them based on their accuracy scores. The best-performing model was XGBoost, achieving an accuracy score of 97.86%.
+All models were trained using the GridSearchCV library, which evaluates them based on their accuracy scores. The best-performing model was XGBoost, achieving an roc auc score of 99.70%.
 
 ```python
 grids = {}
 for model_name, model in models.items():
     print(f'Training and tuning {model_name}...')
-    grids[model_name] = GridSearchCV(estimator=model, param_grid=param_grids[model_name], cv=cv,scoring='accuracy', n_jobs=-1, verbose=1)
+    grids[model_name] = GridSearchCV(estimator=model, param_grid=param_grids[model_name], cv=cv,scoring='roc_auc',n_jobs=-1, verbose=1)
     grids[model_name].fit(X_train_sm, y_train_sm)
     best_params = grids[model_name].best_params_
-    best_score = grids[model_name].best_score_
+    best_score = abs(grids[model_name].best_score_)
     
-    print(f'Best parameters for {model_name}: {best_params}')
-    print(f'Best accuracy for {model_name}: {best_score}\n')
+    print(f'Best Parameters for {model_name}: {best_params}')
+    print(f'Best ROC AUC Score: {best_score}')
+    print(f'Accuracy Score: {accuracy_score(y_train_sm, grids[model_name].predict(X_train_sm))}')
+    print(f'F1 Score: {f1_score(y_train_sm, grids[model_name].predict(X_train_sm))}')
+    print(f'Cross Entropy Loss: {log_loss(y_train_sm, grids[model_name].predict(X_train_sm))}\n')
 ```
 _Python code of model training_
 
 # Model Evaluation
-All models were assessed to identify the best performer on the test data. Once again, the XGBoost model emerged as the top performer, achieving the highest scores in accuracy, precision, recall, and F1.
+All models were assessed to identify the best performer on the test data. Once again, the XGBoost model emerged as the top performer, achieving the highest scores in accuracy, precision, recall, F1, and cross entropy loss.
 
 ```python
 for i in grids.keys():
     y_pred = grids[i].predict(X_test_preprocessed)
     print (i)
+    print(f"\nROC AUC Score: {roc_auc_score(y_test, y_pred)}")
+    print(f"Accuracy Score: {accuracy_score(y_test, y_pred)}")
+    print(f"F1 Score: {f1_score(y_test, y_pred)}")
+    print(f"Cross Entropy Loss: {log_loss(y_test, y_pred)}\n")
     print(classification_report(y_test, y_pred))
     print(confusion_matrix(y_test, y_pred))
-    print("==========================================================")
+    print("\n==========================================================")
     print()
 ```
 _Python code of model evaluation on test data_
@@ -243,6 +250,6 @@ _Confusion Matrix of XGBoost model_
 _Classification Report of XGBoost model_
 
 # Conclusion
-This project focused on predicting customer churn using a Kaggle dataset. We addressed the dataset's imbalance through SMOTE and explored various machine learning models. After thorough evaluation and tuning, XGBoost emerged as the best performer, achieving the highest scores in accuracy, precision, recall, and F1.
+This project focused on predicting customer churn using a Kaggle dataset. We addressed the dataset's imbalance through SMOTE and explored various machine learning models. After thorough evaluation and tuning, XGBoost emerged as the best performer, achieving the highest scores in accuracy, precision, recall, F1, and cross entropy loss.
 
 The insights gained from this analysis can help credit card companies enhance customer retention strategies by identifying at-risk customers and offering targeted interventions. XGBoost's superior performance underscores its effectiveness in predicting churn and supporting customer loyalty initiatives.
