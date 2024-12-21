@@ -206,7 +206,7 @@ cv = KFold(n_splits=3, shuffle=True, random_state=42)
 _Python code of model selection and tuning_
 
 # Model Training
-All models were trained using the GridSearchCV library, which evaluates them based on their accuracy scores. The best-performing model was XGBoost, achieving an roc auc score of 99.70%.
+All models were trained using the GridSearchCV library, which evaluates them based on their roc-auc scores. The best-performing model was XGBoost, achieving an roc-auc score of 0.997.
 
 ```python
 grids = {}
